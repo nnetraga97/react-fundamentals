@@ -7,14 +7,17 @@ function App() {
   const [count, setCount] = useState(0)
   const [name, setName] = useState('')
   const [role, setRole] = useState('')
-  const [users, setUsers] = useState([
-    { id: 1, name: "Ada Lovelace", role: "Mathematician", isOnline: true },
-    { id: 2, name: "Grace Hopper", role: "Computer Scientist", isOnline: false },
-    { id: 3, name: "Katherine Johnson", role: "Mathematician", isOnline: true },
-  ])
+  const [users, setUsers] = useState(() => {
+    const savedUsers = localStorage.getItem('users');
+    return savedUsers ? JSON.parse(savedUsers) : [];
+  });
   const toggleOnline = (id) => {
     setUsers(users.map(u => u.id === id ? { ...u, isOnline: !u.isOnline } : u))
   }
+
+  useEffect(() => {
+    localStorage.setItem('users', JSON.stringify(users));
+  }, [users]);
   const [error, setError] = useState(null);
   function handleSubmit(e){
     e.preventDefault();
