@@ -61,7 +61,17 @@ export function once(fn) {
  *   fast(4); // cached, 16 — slowSquare NOT called again
  */
 export function memoize(fn) {
-  // TODO
+  const cache = new Map();
+  return function (...args) {
+    const key = args[0];
+    if (cache.has(key)) {
+      return cache.get(key);
+    } else {
+      const result = fn(...args);
+      cache.set(key, result);
+      return result;
+    }
+  };
 }
 
 /**
@@ -81,6 +91,7 @@ export function createAccount(initialBalance = 0) {
       return balance;
     },
     withdraw(amount) {
+      if (amount <= 0) throw new Error("withdraw amount must be positive");
       if (amount > balance) throw new Error("insufficient funds");
       balance -= amount;
       return balance;

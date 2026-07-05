@@ -23,11 +23,11 @@
  *   line5: const bound = obj.getValue.bind({ value: 7 }); bound.call(obj)
  */
 export const predictions = {
-  line1: "", // your answer as a string: "42", "undefined", or "TypeError"
-  line2: "",
-  line3: "",
-  line4: "",
-  line5: "",
+  line1: "42", // your answer as a string: "42", "undefined", or "TypeError"
+  line2: "42", // your answer as a string: "42", "undefined", or "TypeError"
+  line3: "42", // your answer as a string: "42", "undefined", or "TypeError"
+  line4: "42",
+  line5: "7",
 };
 
 /**

@@ -99,3 +99,8 @@ test("makeThreeGetters: each getter remembers its own index", () => {
   assert.equal(f1(), 1);
   assert.equal(f2(), 2);
 });
+
+test("createAccount: withdraw is positive", () => {
+  const acct = createAccount(0);
+  assert.throws(() => acct.withdraw(-1000), /withdraw amount must be positive/);
+});
