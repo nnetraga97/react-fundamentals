@@ -39,7 +39,15 @@ export function makeCounter(start = 0) {
  *   init(); // returns 42, logs nothing
  */
 export function once(fn) {
-  // TODO
+  let called = false;
+  let result;
+  return function (...args) {
+    if (!called) {
+      result = fn(...args);
+      called = true;
+    }
+    return result;
+  };
 }
 
 /**
@@ -65,7 +73,22 @@ export function memoize(fn) {
  * The balance must NOT be a property on the returned object.
  */
 export function createAccount(initialBalance = 0) {
-  // TODO
+  let balance = initialBalance;
+  return {
+    deposit(amount) {
+      if (amount <= 0) throw new Error("Deposit amount must be positive");
+      balance += amount;
+      return balance;
+    },
+    withdraw(amount) {
+      if (amount > balance) throw new Error("insufficient funds");
+      balance -= amount;
+      return balance;
+    },
+    getBalance() {
+      return balance;
+    },
+  };
 }
 
 /**
@@ -75,5 +98,9 @@ export function createAccount(initialBalance = 0) {
  * Constraint: you must build the array with a loop (any kind).
  */
 export function makeThreeGetters() {
-  // TODO
+  let getters = [];
+  for (let i = 0; i < 3; i++) {
+    getters.push(() => i);
+  }
+  return getters;
 }
