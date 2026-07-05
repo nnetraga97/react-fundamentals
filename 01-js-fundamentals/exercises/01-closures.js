@@ -18,9 +18,11 @@ export function makeCounter(start = 0) {
   let counter = start;
   function increment() {
     counter++;
+    return counter;
   }
   function decrement() {
     counter--;
+    return counter;
   }
   function current() {
     return counter;
