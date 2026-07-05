@@ -15,6 +15,17 @@
  */
 export function makeCounter(start = 0) {
   // TODO
+  let counter = start;
+  function increment() {
+    counter++;
+  }
+  function decrement() {
+    counter--;
+  }
+  function current() {
+    return counter;
+  }
+  return { increment, decrement, current };
 }
 
 /**
