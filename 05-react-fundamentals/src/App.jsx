@@ -1,63 +1,81 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  fetchUsers,
+  usersSorted,
+  selectUsers,
+  selectUsersStatus,
+  selectUsersError,
+  selectOnlineCount,
+} from './store/usersSlice'
+import Header from './comp/Header'
 import ProfileCard from './comp/ProfileCard'
 import SignUp from './comp/wizards/SignUp'
+import Shop from './comp/shop/Shop'
 
 function App() {
-  const [users, setUsers] = useState(() => {
-    const saved = localStorage.getItem('users')
-    return saved ? JSON.parse(saved) : []
-  })
-
-  const toggleOnline = (id) => {
-    setUsers(users.map(u => u.id === id ? { ...u, isOnline: !u.isOnline } : u))
-  }
-
-  // Seed from the API only when localStorage had nothing
-  useEffect(() => {
-    if (users.length > 0) return
-    let cancelled = false
-    async function fetchUsers() {
-      try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/users')
-        if (!response.ok) throw new Error(`HTTP ${response.status}`)
-        const data = await response.json()
-        if (!cancelled) {
-          setUsers(data.map(u => ({ id: u.id, name: u.name, role: 'User', isOnline: false })))
-        }
-      } catch (error) {
-        console.error('Error fetching users:', error)
-      }
-    }
-    fetchUsers()
-    return () => { cancelled = true }
-  }, [])
+  const users = useSelector(selectUsers)
+  const status = useSelector(selectUsersStatus)
+  const error = useSelector(selectUsersError)
+  const onlineCount = useSelector(selectOnlineCount)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    localStorage.setItem('users', JSON.stringify(users))
-  }, [users])
+    // Thunks are dispatched like actions; RTK runs the async function
+    // and dispatches pending/fulfilled/rejected for us.
+    if (status === 'idle') dispatch(fetchUsers())
+  }, [status, dispatch])
 
   return (
-    <main>
-      <h1>React Fundamentals</h1>
-      <h2>{users.filter(u => u.isOnline).length}/{users.length} online</h2>
-      {users.map((u) => (
-        <ProfileCard
-          key={u.id}
-          name={u.name}
-          role={u.role}
-          isOnline={u.isOnline}
-          onToggle={() => toggleOnline(u.id)}
-        />
-      ))}
-      <button onClick={() => setUsers([...users].toSorted((a, b) => b.name.localeCompare(a.name)))}>
-        Sort ↓
-      </button>
-      <button onClick={() => setUsers([...users].toSorted((a, b) => a.name.localeCompare(b.name)))}>
-        Sort ⬆️
-      </button>
-      <SignUp setUsers={setUsers} />
-    </main>
+    <>
+      <Header />
+      <main>
+        <section className="hero">
+          <h1>
+            The <em>Team</em> Directory
+          </h1>
+          <p className="muted">
+            {onlineCount} of {users.length} teammates online
+          </p>
+        </section>
+
+        <section>
+          <div className="section-head">
+            <h2>People</h2>
+            <span className="sort-controls">
+              <button className="btn ghost sm" onClick={() => dispatch(usersSorted('asc'))}>
+                A→Z
+              </button>
+              <button className="btn ghost sm" onClick={() => dispatch(usersSorted('desc'))}>
+                Z→A
+              </button>
+            </span>
+          </div>
+
+          {status === 'loading' && <p className="muted">Loading the crew…</p>}
+          {status === 'error' && <p className="form-error">Couldn’t load users: {error}</p>}
+          <div className="card-grid">
+            {users.map((u, i) => (
+              <ProfileCard key={u.id} user={u} index={i} />
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <div className="section-head">
+            <h2>Join the team</h2>
+          </div>
+          <SignUp />
+        </section>
+
+        <section>
+          <div className="section-head">
+            <h2>Supply closet</h2>
+          </div>
+          <Shop />
+        </section>
+      </main>
+    </>
   )
 }
 
