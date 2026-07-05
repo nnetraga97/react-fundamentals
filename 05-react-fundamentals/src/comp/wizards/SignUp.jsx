@@ -18,6 +18,7 @@ function SignUp({ setUsers }) {
     setError(null);
     setUsers(prevUsers => [...prevUsers, { id: crypto.randomUUID(), name, role, email, bio }]);
     setStep(1);
+    setError('User added successfully');
     setName('');
     setRole('');
     setEmail('');
