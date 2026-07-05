@@ -7,13 +7,24 @@ function App() {
   const [count, setCount] = useState(0)
   const [name, setName] = useState('')
   const [role, setRole] = useState('')
-  const [users, setUsers] = useState(() => {
-    const savedUsers = localStorage.getItem('users');
-    return savedUsers ? JSON.parse(savedUsers) : [];
-  });
+  const [users, setUsers] = useState([]);
   const toggleOnline = (id) => {
     setUsers(users.map(u => u.id === id ? { ...u, isOnline: !u.isOnline } : u))
   }
+
+  async function fetchUsers() {
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/users');
+      const data = await response.json();
+      setUsers(data.map(u => ({ id: u.id, name: u.name, role: 'User', isOnline: false })));
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  }
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('users', JSON.stringify(users));
