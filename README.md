@@ -93,6 +93,10 @@ A structured, hands-on practice repo for leveling up from "I've followed React t
 | Date | Module | Notes |
 |------|--------|-------|
 | 2026-07-05 | Plan created | Curriculum committed to README |
+| 2026-07-05 | Module 1 (partial) | Closures exercise complete (13/13); `this` exercise partially done — backfill later |
+| 2026-07-05 | Module 5 (core done) | Profile cards, keys, controlled forms, signup wizard mini-project |
+| 2026-07-05 | Module 6 (partial) | useState/useEffect, localStorage, fetch; cleanup + custom hooks pending |
+| 2026-07-05 | Module 8 started | Pivoted to Redux Toolkit — RTK + react-redux installed |
 
 ## Session ritual
 
