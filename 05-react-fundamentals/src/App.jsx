@@ -7,12 +7,12 @@ function App() {
   const [name, setName] = useState('')
   const [role, setRole] = useState('')
   const [users, setUsers] = useState([
-    { name: "Ada Lovelace", role: "Mathematician", isOnline: true },
-    { name: "Grace Hopper", role: "Computer Scientist", isOnline: false },
-    { name: "Katherine Johnson", role: "Mathematician", isOnline: true },
+    { id: 1, name: "Ada Lovelace", role: "Mathematician", isOnline: true },
+    { id: 2, name: "Grace Hopper", role: "Computer Scientist", isOnline: false },
+    { id: 3, name: "Katherine Johnson", role: "Mathematician", isOnline: true },
   ])
-  const toggleOnline = (name) => {
-    setUsers(users.map(u => u.name === name ? { ...u, isOnline: !u.isOnline } : u))
+  const toggleOnline = (id) => {
+    setUsers(users.map(u => u.id === id ? { ...u, isOnline: !u.isOnline } : u))
   }
   const [error, setError] = useState(null);
   function handleSubmit(e){
@@ -26,7 +26,7 @@ function App() {
       return;
     }
     setError(null);
-    setUsers([...users, { name, role, isOnline: false }]);
+    setUsers([...users, { id: crypto.randomUUID(), name, role, isOnline: false }]);
     setName('');
     setRole('');
   }
@@ -35,7 +35,7 @@ function App() {
       <h1>React Fundamentals</h1>
       <h2>{users.filter(u => u.isOnline).length}/{users.length} online</h2>
       <button onClick={() => setCount(count + 1)}>Count is {count}</button>
-      {users.map((u) => <ProfileCard key={u.name} name={u.name} role={u.role} isOnline={u.isOnline} onToggle={() => toggleOnline(u.name)} />)}
+      {users.map((u) => <ProfileCard key={u.id} name={u.name} role={u.role} isOnline={u.isOnline} onToggle={() => toggleOnline(u.id)} />)}
       <button onClick={() => setUsers([...users].toSorted((a, b) => a.name.localeCompare(b.name)).toReversed())}>
   Sort ↓
 </button>
@@ -44,12 +44,12 @@ function App() {
 </button>
       {/* Lesson assignments render below */}
 
-      <forrm onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
               <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Name" />
       <input value={role} onChange={(e) => setRole(e.target.value)} type="text" placeholder="Role" />
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-        <button type="submit" onClick={handleSubmit}>Add</button> </forrm>
+        <button type="submit">Add</button> </form>
     </main>
   )
 }
