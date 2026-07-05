@@ -14,8 +14,8 @@ function SignUp({ setUsers }) {
       setError('Name, role, and email are required');
       return;
     }
+
     setError(null);
-    console.log({ name, role, email, bio });
     setUsers(prevUsers => [...prevUsers, { id: crypto.randomUUID(), name, role, email, bio }]);
     setStep(1);
     setName('');
@@ -27,6 +27,10 @@ function SignUp({ setUsers }) {
   const onNext = () => {
     if (step === 1 && (name.trim() === '' || email.trim() === '')) {
       setError('Name and email are required');
+      return;
+    }
+    if(email.trim().length < 5 || !email.includes('@')|| !email.includes('.') || email.indexOf('@') > email.lastIndexOf('.')) {
+      setError('Email must be valid');
       return;
     }
     if (step === 2 && role.trim() === '') {
@@ -69,7 +73,8 @@ function Profile({role, bio, setRole, setBio, setStep,onNext}){
         <div>
             <h2>Profile Creation</h2>
             <input type="text" placeholder="Role" value={role} onChange={(e) => setRole(e.target.value)} />
-            <textarea placeholder="Bio" value={bio} onChange={(e) => setBio(e.target.value)} />
+            <textarea placeholder="Bio" value={bio} onChange={(e) => { if (e.target.value.length <= 200) setBio(e.target.value) }} />
+                <p>Character Count: {bio.length}/200</p>
             <button onClick={onNext}>Next</button>
         </div>
     )
