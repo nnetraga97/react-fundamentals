@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import ProfileCard from './comp/ProfileCard'
+import SignUp from './comp/wizards/SignUp'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -43,13 +44,7 @@ function App() {
   Sort ⬆️
 </button>
       {/* Lesson assignments render below */}
-
-      <form onSubmit={handleSubmit}>
-              <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Name" />
-      <input value={role} onChange={(e) => setRole(e.target.value)} type="text" placeholder="Role" />
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-        <button type="submit">Add</button> </form>
+        <SignUp setUsers={setUsers} />
     </main>
   )
 }
