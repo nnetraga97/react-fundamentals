@@ -1,0 +1,8 @@
+{
+  "name": "01-js-fundamentals",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
